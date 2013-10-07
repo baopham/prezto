@@ -69,7 +69,7 @@ function prompt_bpm_setup {
   zstyle ':prezto:module:git:info:renamed' format ' %%B%F{magenta}➜%f%%b'     # %r
   zstyle ':prezto:module:git:info:keys' format \
   'prompt' ' (%s$(coalesce "%b" "%c" "%p")%a%m%u%d%C)' \
-  'rprompt' '%U%A%B%r%S'
+  'rprompt' '%r%U%A%B%S'
 
   # Define prompts.
   PROMPT='${_prompt_bpm_pwd}${(e)git_info[prompt]}${editor_info[keymap]} '
