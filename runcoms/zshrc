@@ -216,3 +216,10 @@ alias m='fasd -fe mvim' # quick opening files with macvim
 alias o='fasd -ae open' # quick opening files with open
 
 #}}}
+
+#{{{ LC
+
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
+#}}}
