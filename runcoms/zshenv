@@ -51,7 +51,7 @@ path=(
 )
 
 [[ -d "$HOME/.rvm" ]] && PATH=$PATH:$HOME/.rvm/bin:$HOME/.rvm/scripts && . "$HOME/.rvm/scripts/rvm"
-[[ -d "$HOME/.config/powerline" ]] && PYTHONPATH=$PYTHONPATH:$HOME/.config/powerline
+[[ -d "$HOME/.config/powerline" ]] && export PYTHONPATH=$PYTHONPATH:$HOME/.config/powerline
 
 #
 # Less
