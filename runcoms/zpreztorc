@@ -27,6 +27,7 @@ zstyle ':prezto:load' pmodule \
   'editor' \
   'history' \
   'completion' \
+  'utility' \
   'prompt' \
   'fasd' \
   'git' \
