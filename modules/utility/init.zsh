@@ -78,10 +78,15 @@ else
   # BSD Core Utilities
   if zstyle -t ':prezto:module:utility:ls' color; then
     # Define colors for BSD ls.
-    export LSCOLORS='exfxcxdxbxGxDxabagacad'
+    export LSCOLORS='gxfxcxdxbxegedabagacad'
 
     # Define colors for the completion system.
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
+    export LS_COLORS="no=00:fi=00:di=0;36:ln=01;36:pi=40;33:so=0;32:do=01;35:bd=40;33;01:cd=40;33;01: \ 
+    or=40;31;01:su=37;41:sg=30;43:tw=30;103:ow=30;103:st=37;44:ex=0;31:*.jpg=01;35:*.jpeg=01;35: \ 
+    *.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35: \ 
+    *.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35: \ 
+    *.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.flac=01;35: \ 
+    *.mp3=01;35:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:"
 
     alias ls='ls -G'
   else
