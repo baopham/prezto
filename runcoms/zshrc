@@ -88,8 +88,7 @@ alias clear-logs='sudo rm /var/log/asl/*.asl'
 alias git-pre-commit='mv ./.git/hooks/{pre-commit.sample,pre-commit}'
 
 # grc
-GRC=`which grc`
-if [ "$TERM" != dumb ] && [ -n GRC ] ; then
+if [ "$TERM" != dumb ] && [ type grc &> /dev/null ] ; then
   unalias grc &> /dev/null
   alias colourify="`which grc` -es --colour=auto"
   alias configure='colourify ./configure'
