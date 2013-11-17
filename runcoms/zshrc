@@ -66,14 +66,6 @@ bindkey -M viins '^F'      complete-file
 
 #{{{ Alias
 
-alias ll="ls -lh"
-alias la="ls -A"
-alias cpu='top -u'
-alias sz='source ~/.zshrc'
-alias mv="mv -v"
-alias grep='grep --colour=always -n'
-alias dirs='dirs -v'
-alias cleanup='rm "#"* "."*~ *~ *.bak *.dvi *.aux'
 alias firefox='open -a /Applications/Firefox.app'
 alias excel='open -a /Applications/Microsoft\ Office\ 2011/Microsoft\ Excel.app'
 alias word='open -a /Applications/Microsoft\ Office\ 2011/Microsoft\ Word.app'
@@ -86,23 +78,6 @@ alias drushy='drush -y'
 alias apachelog='tail -f /private/var/log/apache2/error_log'
 alias clear-logs='sudo rm /var/log/asl/*.asl'
 alias git-pre-commit='mv ./.git/hooks/{pre-commit.sample,pre-commit}'
-
-# grc
-if [ "$TERM" != dumb ] && [ type grc &> /dev/null ] ; then
-  unalias grc &> /dev/null
-  alias colourify="`which grc` -es --colour=auto"
-  alias configure='colourify ./configure'
-  alias diff='colourify diff'
-  alias make='colourify make'
-  alias gcc='colourify gcc'
-  alias g++='colourify g++'
-  alias as='colourify as'
-  alias gas='colourify gas'
-  alias ld='colourify ld'
-  alias netstat='colourify netstat'
-  alias ping='colourify ping'
-  alias traceroute='colourify /usr/sbin/traceroute'
-fi
 
 #}}}
 

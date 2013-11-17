@@ -51,12 +51,31 @@ alias cp="${aliases[cp]:-cp} -i"
 alias e='${(z)VISUAL:-${(z)EDITOR}}'
 alias ln="${aliases[ln]:-ln} -i"
 alias mkdir="${aliases[mkdir]:-mkdir} -p"
-alias mv="${aliases[mv]:-mv} -i"
+alias mv="${aliases[mv]:-mv} -iv"
 alias p='${(z)PAGER}'
 alias po='popd'
 alias pu='pushd'
 alias rm="${aliases[rm]:-rm} -i"
 alias type='type -a'
+alias sz='source ~/.zshrc'
+alias grep='grep --colour=always -n'
+
+# grc
+if [ "$TERM" != dumb ] && [ type grc &> /dev/null ] ; then
+  unalias grc &> /dev/null
+  alias colourify="`which grc` -es --colour=auto"
+  alias configure='colourify ./configure'
+  alias diff='colourify diff'
+  alias make='colourify make'
+  alias gcc='colourify gcc'
+  alias g++='colourify g++'
+  alias as='colourify as'
+  alias gas='colourify gas'
+  alias ld='colourify ld'
+  alias netstat='colourify netstat'
+  alias ping='colourify ping'
+  alias traceroute='colourify /usr/sbin/traceroute'
+fi
 
 # ls
 if is-callable 'dircolors'; then
