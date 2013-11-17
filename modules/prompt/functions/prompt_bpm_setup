@@ -5,8 +5,8 @@
 #   Bao Pham <gbaopham@gmail.com>
 #
 # Screenshots:
-#   http://i.imgur.com/Qe5Xy.png
-#   http://i.imgur.com/1ERz4.png
+#   http://cl.ly/image/0O3y120B0T1z
+#   http://cl.ly/image/111H2O170z0Q
 #
 # GistID: 4230860
 #
@@ -16,12 +16,12 @@ pmodload 'helper'
 
 function prompt_bpm_pwd {
   if [ -n "$SSH_CONNECTION" ] ; then
-    _prompt_bpm_pwd='%F{green}%n@%m %40<...<%~%f'
+    _prompt_bpm_pwd='%F{cyan}%n@%m %40<...<%~%f'
   else
     if [ "$USER" != "baopham" ] ; then
-      _prompt_bpm_pwd='%F{green}%n %40<...<%~%f'
+      _prompt_bpm_pwd='%F{cyan}%n %40<...<%~%f'
     else
-      _prompt_bpm_pwd='%F{green}%40<...<%~%f'
+      _prompt_bpm_pwd='%F{cyan}%40<...<%~%f'
     fi
   fi
 }
@@ -54,9 +54,9 @@ function prompt_bpm_setup {
   zstyle ':prezto:module:editor:info:keymap:primary' format " %B%F{green}❯%f%b"
   zstyle ':prezto:module:editor:info:keymap:alternate' format " %B%F{red}❯%f%b"
   zstyle ':prezto:module:git:info' verbose 'yes'
-  zstyle ':prezto:module:git:info:branch' format '%F{cyan}%b%f'               # %b
-  zstyle ':prezto:module:git:info:commit' format '%F{cyan}%.7c...%f'          # %c
-  zstyle ':prezto:module:git:info:position' format '%F{cyan}%p%f'             # %p
+  zstyle ':prezto:module:git:info:branch' format '%F{green}%b%f'              # %b
+  zstyle ':prezto:module:git:info:commit' format '%F{green}%.7c...%f'         # %c
+  zstyle ':prezto:module:git:info:position' format '%F{green}%p%f'            # %p
   zstyle ':prezto:module:git:info:action' format '%%B%F{yellow}%s%f%%b:'      # %s
   zstyle ':prezto:module:git:info:added' format '%F{green}●%f'                # %a
   zstyle ':prezto:module:git:info:deleted' format '%%B%F{red}✖%f%%b'          # %d
@@ -68,7 +68,7 @@ function prompt_bpm_setup {
   zstyle ':prezto:module:git:info:stashed' format ' %%B%F{cyan}✭%f%%b'        # %S
   zstyle ':prezto:module:git:info:renamed' format ' %%B%F{magenta}➜%f%%b'     # %r
   zstyle ':prezto:module:git:info:keys' format \
-  'prompt' ' (%s$(coalesce "%b" "%c" "%p")%a%m%u%d%C)' \
+  'prompt' ' (%s$(coalesce "%b" "%c" "%p")%m%u%d%a%C)' \
   'rprompt' '%r%U%A%B%S'
 
   # Define prompts.
