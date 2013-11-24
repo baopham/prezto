@@ -47,7 +47,6 @@ typeset -gU cdpath fpath mailpath path
 path=(
   /usr/local/{bin,sbin}
   $path
-  /usr/local/share/python
 )
 
 [[ -d "$HOME/.rvm" ]] && PATH=$PATH:$HOME/.rvm/bin:$HOME/.rvm/scripts && . "$HOME/.rvm/scripts/rvm"
