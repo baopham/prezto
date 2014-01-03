@@ -173,3 +173,5 @@ alias m='fasd -fe mvim' # quick opening files with macvim
 alias o='fasd -ae open' # quick opening files with open
 
 #}}}
+
+[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh # This loads NVM
