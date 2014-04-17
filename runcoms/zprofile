@@ -81,3 +81,7 @@ fi
 [[ -d "$HOME/.rvm" ]] && PATH=$PATH:$HOME/.rvm/bin:$HOME/.rvm/scripts && . "$HOME/.rvm/scripts/rvm"
 [[ -d "$HOME/.config/powerline" ]] && export PYTHONPATH=$PYTHONPATH:$HOME/.config/powerline
 [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh # This loads NVM
+
+if (( $+commands[tmuxinator])); then
+  source /usr/local/bin/tmuxinator.zsh
+fi
