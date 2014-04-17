@@ -24,19 +24,6 @@ fi
 
 #}}}
 
-#{{{ Title
-
-# Set the terminal title in OS X, stolen from http://tinyurl.com/5u9wfr
-case $TERM in (*xterm*|ansi)
-  function settab { print -Pn "\e]1;%15<...<%~\a" }
-  function settitle { print -Pn "\e]2;%~\a" }
-  function chpwd { settab; settitle }
-  settab; settitle
-  ;;
-esac
-
-#}}}
-
 #{{{ Completion
 
 # Fall back to file completion if all else fails
