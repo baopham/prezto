@@ -16,7 +16,7 @@ fi
 
 # {{{ Prezto settings:
 #
-# Modules: editor, history, completion, prompt, fasd, git
+# Modules: editor, history, completion, utility, prompt, fasd, git, history-substring-search
 # Editor keymap: vi
 # Theme: bpm (https://gist.github.com/4230860)
 #
@@ -51,28 +51,7 @@ bindkey -M viins '^F'      complete-file
 
 #}}}
 
-#{{{ Alias
-
-alias firefox='open -a /Applications/Firefox.app'
-alias excel='open -a /Applications/Microsoft\ Office\ 2011/Microsoft\ Excel.app'
-alias word='open -a /Applications/Microsoft\ Office\ 2011/Microsoft\ Word.app'
-alias text='open -a /Applications/TextEdit.app'
-alias yui='java -jar ~/Projects/yuicompressor-2.4.7.jar'
-alias compiler='java -jar ~/Projects/compiler.jar'
-alias hide='setfile -a V'
-alias show='setfile -a v'
-alias drushy='drush -y'
-alias apachelog='tail -f /private/var/log/apache2/error_log'
-alias clear-logs='sudo rm /var/log/asl/*.asl'
-alias git-pre-commit='mv ./.git/hooks/{pre-commit.sample,pre-commit}'
-
-#}}}
-
 #{{{ Extra Vim Key binding
-
-# Switch to command mode.
-bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M viins 'kj' vi-cmd-mode
 
 # Movement
 bindkey -M viins '^E'   end-of-line
@@ -103,43 +82,8 @@ bindkey '^['            self-insert
 
 #{{{ Functions
 
-function batch-rename {
-  if [ $# -eq 0 ] ; then
-    echo 'batch-rename *regex-files* new-basename'
-  else
-    args=($*)
-    files=($args[1,-2])
-    basename=$args[-1]
-    count=1
-    for file in $files; do
-      filename=$(basename "$file")
-      ext="${filename##*.}"
-      mv -v ${file} ${basename}-${count}.${ext}
-      ((count=$count+1))
-    done
-    unset count args files basename filename ext
-  fi
-}
-
 function nametab {
   echo -ne "\033]0;"$@"\007"
-}
-
-function proj-ctags {
-  # Check if the current directory is a git repo
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    dir="$(git rev-parse --show-toplevel)/.git"
-  else
-    dir="$(pwd)"
-  fi
-  if [ $# -eq 0 ] ; then
-    ctags -f ${dir}/.tags
-  else
-    args=($*) 
-    for arg in $args; do
-      ctags --languages=${arg} -f ${dir}/${arg}.tags
-    done
-  fi
 }
 
 #}}}
@@ -149,14 +93,5 @@ function proj-ctags {
 setopt AUTO_CD
 
 setopt CORRECT
-
-#}}}
-
-#{{{ fasd
-
-# Alias
-alias v='fasd -fe vim' # quick opening files with vim
-alias m='fasd -fe mvim' # quick opening files with macvim
-alias o='fasd -ae open' # quick opening files with open
 
 #}}}
