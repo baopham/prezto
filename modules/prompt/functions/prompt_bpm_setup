@@ -37,6 +37,15 @@ function prompt_bpm_precmd {
   if (( $+functions[git-info] )); then
     git-info
   fi
+
+  # Get Ruby version only in a Ruby project.
+  if (( $+functions[ruby-app-root] )); then
+    if [[ -n $(ruby-app-root) ]]; then
+      ruby-info
+    else
+      unset ruby_info
+    fi
+  fi
 }
 
 function prompt_bpm_setup {
@@ -47,7 +56,7 @@ function prompt_bpm_setup {
   # Load required functions.
   autoload -Uz add-zsh-hook
 
-  # Add hook for calling git-info before each command.
+  # Add hook for calling git-info and ruby-info (for Ruby project only)  before each command.
   add-zsh-hook precmd prompt_bpm_precmd
 
   zstyle ':prezto:module:editor:info:completing' format '%B%F{red}...%f%b'
@@ -68,13 +77,14 @@ function prompt_bpm_setup {
   zstyle ':prezto:module:git:info:stashed' format ' %%B%F{cyan}✭%f%%b'        # %S
   zstyle ':prezto:module:git:info:renamed' format ' %%B%F{magenta}➜%f%%b'     # %r
   zstyle ':prezto:module:git:info:keys' format \
-  'prompt' ' (%s$(coalesce "%b" "%c" "%p")%m%u%d%a%C)' \
-  'rprompt' '%r%U%A%B%S'
+    'prompt' ' (%s$(coalesce "%b" "%c" "%p")%m%u%d%a%C)' \
+    'rprompt' '%r%U%A%B%S'
+  zstyle ':prezto:module:ruby:info:version' format ' %%B%F{red}[%v]%f%%b'     # %v
 
   # Define prompts.
   PROMPT='${_prompt_bpm_pwd}${(e)git_info[prompt]}${editor_info[keymap]} '
   RCMD=" %B%F{red}❮❮❮%f%b"  # indicate vim command mode
-  RPROMPT='${${KEYMAP/vicmd/$RCMD}/(main|viins)/}${git_info[rprompt]}'
+  RPROMPT='${${KEYMAP/vicmd/$RCMD}/(main|viins)/}${git_info[rprompt]}${ruby_info[version]}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
