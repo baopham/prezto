@@ -8,8 +8,8 @@ and prompt themes.
 Installation
 ------------
 
-Prezto will work with any recent release of Zsh, but the minimum recommended
-version is 4.3.11.
+Prezto will work with any recent release of Zsh, but the minimum required
+version is 4.3.17.
 
   1. Launch Zsh:
 
