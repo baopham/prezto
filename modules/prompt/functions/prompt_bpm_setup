@@ -16,12 +16,12 @@ pmodload 'helper'
 
 function prompt_bpm_pwd {
   if [ -n "$SSH_CONNECTION" ] ; then
-    _prompt_bpm_pwd='%F{cyan}%n@%m %40<...<%~%f'
+    _prompt_bpm_pwd='%F{cyan}%n@%m %60<...<%~%f'
   else
-    if [ "$USER" != "baopham" ] ; then
-      _prompt_bpm_pwd='%F{cyan}%n %40<...<%~%f'
+    if [ "$USER" != "bao" ] ; then
+      _prompt_bpm_pwd='%F{cyan}%n %60<...<%~%f'
     else
-      _prompt_bpm_pwd='%F{cyan}%40<...<%~%f'
+      _prompt_bpm_pwd='%F{cyan}%60<...<%~%f'
     fi
   fi
 }

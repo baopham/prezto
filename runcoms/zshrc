@@ -65,6 +65,12 @@ alias drushy='drush -y'
 alias apachelog='tail -f /private/var/log/apache2/error_log'
 alias clear-logs='sudo rm /var/log/asl/*.asl'
 alias git-pre-commit='mv ./.git/hooks/{pre-commit.sample,pre-commit}'
+alias drush-dis-saml='drush vset simplesamlphp_auth_activate false && drush vset simplesamlphp_auth_installdir "" && drushy dis simplesamlphp_auth'
+alias drush-setup='drush-dis-saml && drushy dis securepages && drush vset file_temporary_path /tmp'
+alias bhat='./vendor/bin/behat --stop-on-failure'
+alias punit='./vendor/bin/phpunit'
+alias jasypt-encrypt='~/Projects/jasypt-1.9.1/bin/encrypt.sh'
+alias jasypt-decrypt='~/Projects/jasypt-1.9.1/bin/decrypt.sh'
 
 #}}}
 
@@ -141,6 +147,22 @@ function proj-ctags {
     done
   fi
 }
+
+function setjdk() {
+  if [ $# -ne 0 ]; then
+    removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
+    if [ -n "${JAVA_HOME+x}" ]; then
+      removeFromPath $JAVA_HOME
+    fi
+    export JAVA_HOME=`/usr/libexec/java_home -v $@`
+    export PATH=$JAVA_HOME/bin:$PATH
+  fi
+}
+
+function removeFromPath() {
+  export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
+}
+
 
 #}}}
 
