@@ -67,12 +67,14 @@ alias drush-dis-saml='drush vset simplesamlphp_auth_activate false && drush vset
 alias drush-setup='drush-dis-saml && drushy dis securepages && drush vset file_temporary_path /tmp'
 alias bhat='./vendor/bin/behat --stop-on-failure'
 alias punit='./vendor/bin/phpunit'
-alias jasypt-encrypt='~/Projects/jasypt-1.9.1/bin/encrypt.sh'
-alias jasypt-decrypt='~/Projects/jasypt-1.9.1/bin/decrypt.sh'
+alias jasypt-encrypt='~/Projects/jasypt/bin/encrypt.sh algorithm=PBEWithMD5AndDES'
+alias jasypt-decrypt='~/Projects/jasypt/bin/decrypt.sh algorithm=PBEWithMD5AndDES'
 
 #}}}
 
 #{{{ Extra Vim Key binding
+
+bindkey -e
 
 # Switch to command mode.
 bindkey -M viins 'jk' vi-cmd-mode
@@ -83,8 +85,8 @@ bindkey -M viins '^E'   end-of-line
 bindkey -M viins '^A'   vi-beginning-of-line
 bindkey -M vicmd '^E'   end-of-line
 bindkey -M vicmd '^A'   vi-beginning-of-line
-bindkey "\e[1;5C"       forward-word            # Ctrl + right arrow
-bindkey "\e[1;5D"       backward-word           # Ctrl + left arrow
+bindkey "\e^[[5C"       forward-word            # Ctrl + right arrow
+bindkey "\e^[[5D"       backward-word           # Ctrl + left arrow
 
 # Kill line
 bindkey -M viins '^K'   kill-line

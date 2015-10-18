@@ -76,15 +76,23 @@ TMPPREFIX="${TMPDIR%/}/zsh"
 #
 # Custom
 #
-[[ -d "$HOME/.rvm" ]] && PATH=$PATH:$HOME/.rvm/bin:$HOME/.rvm/scripts && . "$HOME/.rvm/scripts/rvm"
-[[ -d "$HOME/.config/powerline" ]] && export PYTHONPATH=$PYTHONPATH:$HOME/.vim/bundle/powerline:$HOME/.config/powerline && export PATH=$PATH:$HOME/.vim/bundle/powerline/scripts
 
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
+
 export M2_HOME=$(brew --prefix maven)/libexec
 
 [[ -d "$HOME/.composer/vendor/bin" ]] && PATH=$PATH:$HOME/.composer/vendor/bin
 
+[[ -d "$HOME/.bin" ]] && PATH=$PATH:$HOME/.bin
+
 export ECLIM_ECLIPSE_HOME='/Applications/eclipse-luna'
 
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+if (( $+commands[nvm] )); then
+  export NVM_DIR=~/.nvm
+  source $(brew --prefix nvm)/nvm.sh
+fi
+
+if (( $+commands[rbenv] )); then
+  [[ -d "$HOME/.rbenv/bin" ]] && PATH=$PATH:$HOME/.rbenv/bin
+  eval "$(rbenv init -)"
+fi
