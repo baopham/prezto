@@ -63,6 +63,7 @@ alias behat='./vendor/bin/behat --stop-on-failure'
 alias phpunit='./vendor/bin/phpunit'
 alias jasypt-encrypt='~/Projects/jasypt/bin/encrypt.sh algorithm=PBEWithMD5AndDES'
 alias jasypt-decrypt='~/Projects/jasypt/bin/decrypt.sh algorithm=PBEWithMD5AndDES'
+alias homestead='function __homestead() { (cd ~/Homestead && vagrant $*); unset -f __homestead; }; __homestead'
 
 #}}}
 
