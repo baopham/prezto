@@ -70,16 +70,15 @@ alias homestead='function __homestead() { (cd ~/Homestead && vagrant $*); unset 
 #{{{ Extra Vim Key binding
 
 # Switch to command mode.
-bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M viins 'kj' vi-cmd-mode
+bindkey -M viins '^[' vi-cmd-mode
 
 # Movement
 bindkey -M viins '^E'   end-of-line
 bindkey -M viins '^A'   vi-beginning-of-line
 bindkey -M vicmd '^E'   end-of-line
 bindkey -M vicmd '^A'   vi-beginning-of-line
-bindkey "\e^[[5C"       forward-word            # Ctrl + right arrow
-bindkey "\e^[[5D"       backward-word           # Ctrl + left arrow
+bindkey "^[[1;5C"       forward-word            # Ctrl + right arrow
+bindkey "^[[1;5D"       backward-word           # Ctrl + left arrow
 
 # Kill line
 bindkey -M viins '^K'   kill-line
@@ -94,9 +93,6 @@ bindkey -M vicmd "??"   history-beginning-search-backward
 
 # Backspace
 bindkey -M viins '^W'   backward-kill-word
-
-# Unbind <C-[>
-bindkey '^['            self-insert
 
 #}}}
 
