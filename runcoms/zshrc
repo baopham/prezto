@@ -69,8 +69,6 @@ alias homestead='function __homestead() { (cd ~/Homestead && vagrant $*); unset 
 
 #{{{ Extra Vim Key binding
 
-bindkey -e
-
 # Switch to command mode.
 bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M viins 'kj' vi-cmd-mode
