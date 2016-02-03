@@ -49,6 +49,9 @@ zle -C complete-file menu-expand-or-complete _generic
 zstyle ':completion:complete-file:*' completer _files
 bindkey -M viins '^F'      complete-file
 
+# AWS CLI
+source /usr/local/share/zsh/site-functions/_aws
+
 #}}}
 
 #{{{ Alias
