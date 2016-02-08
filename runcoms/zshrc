@@ -159,3 +159,4 @@ alias m='fasd -fe mvim' # quick opening files with macvim
 alias o='fasd -ae open' # quick opening files with open
 
 #}}}
+source ~/.common_zshrc
