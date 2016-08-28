@@ -160,3 +160,5 @@ alias o='fasd -ae open' # quick opening files with open
 
 #}}}
 source ~/.common_zshrc
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
