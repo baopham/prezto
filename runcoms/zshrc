@@ -56,7 +56,6 @@ bindkey -M viins '^F'      complete-file
 alias text='open -a /Applications/TextEdit.app'
 alias hide='setfile -a V'
 alias show='setfile -a v'
-alias mux='tmuxinator'
 
 #}}}
 
