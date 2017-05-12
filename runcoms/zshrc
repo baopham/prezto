@@ -53,13 +53,10 @@ bindkey -M viins '^F'      complete-file
 
 #{{{ Alias
 
-alias firefox='open -a /Applications/Firefox.app'
 alias text='open -a /Applications/TextEdit.app'
 alias hide='setfile -a V'
 alias show='setfile -a v'
-alias jasypt-encrypt='~/Projects/jasypt/bin/encrypt.sh algorithm=PBEWithMD5AndDES'
-alias jasypt-decrypt='~/Projects/jasypt/bin/decrypt.sh algorithm=PBEWithMD5AndDES'
-alias homestead='function __homestead() { (cd ~/Homestead && vagrant $*); unset -f __homestead; }; __homestead'
+alias mux='tmuxinator'
 
 #}}}
 
@@ -159,4 +156,3 @@ alias o='fasd -ae open' # quick opening files with open
 test -e ${HOME}/.common_zshrc && source ${HOME}/.common_zshrc
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
-source ~/.common_zshrc
