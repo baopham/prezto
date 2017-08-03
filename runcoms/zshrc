@@ -141,6 +141,9 @@ setopt AUTO_CD
 
 setopt CORRECT
 
+autoload -U compinit && compinit
+autoload -U bashcompinit && bashcompinit
+
 #}}}
 
 #{{{ fasd
