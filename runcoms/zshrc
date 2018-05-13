@@ -12,16 +12,6 @@ fi
 
 # Customize to your needs...
 
-# GistID: 2957960
-
-# {{{ Prezto settings:
-#
-# Modules: editor, history, completion, prompt, fasd, git
-# Editor keymap: vi
-# Theme: bpm (https://gist.github.com/4230860)
-#
-# }}}
-
 #}}}
 
 #{{{ Completion
