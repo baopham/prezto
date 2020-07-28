@@ -1,193 +1,251 @@
 #
-# Initializes Prezto.
+# Defines general aliases and functions.
 #
 # Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Suraj N. Kurapati <sunaku@gmail.com>
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-#
-# Version Check
-#
+# Load dependencies.
+pmodload 'helper' 'spectrum'
 
-# Check for the minimum supported version.
-min_zsh_version='4.3.11'
-if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
-  printf "prezto: old shell detected, minimum required: %s\n" "$min_zsh_version" >&2
-  return 1
+# Correct commands.
+if zstyle -T ':prezto:module:utility' correct; then
+  setopt CORRECT
 fi
-unset min_zsh_version
 
-# zprezto convenience updater
-# The function is surrounded by ( ) instead of { } so it starts in a subshell
-# and won't affect the environment of the calling shell
-function zprezto-update {
-  (
-    function cannot-fast-forward {
-      local STATUS="$1"
-      [[ -n "${STATUS}" ]] && printf "%s\n" "${STATUS}"
-      printf "Unable to fast-forward the changes. You can fix this by "
-      printf "running\ncd '%s' and then\n'git pull' " "${ZPREZTODIR}"
-      printf "to manually pull and possibly merge in changes\n"
-    }
-    cd -q -- "${ZPREZTODIR}" || return 7
-    local orig_branch="$(git symbolic-ref HEAD 2> /dev/null | cut -d '/' -f 3)"
-    if [[ "$orig_branch" == "master" ]]; then
-      git fetch || return "$?"
-      local UPSTREAM=$(git rev-parse '@{u}')
-      local LOCAL=$(git rev-parse HEAD)
-      local REMOTE=$(git rev-parse "$UPSTREAM")
-      local BASE=$(git merge-base HEAD "$UPSTREAM")
-      if [[ $LOCAL == $REMOTE ]]; then
-        printf "There are no updates.\n"
-        return 0
-      elif [[ $LOCAL == $BASE ]]; then
-        printf "There is an update available. Trying to pull.\n\n"
-        if git pull --ff-only; then
-          printf "Syncing submodules\n"
-          git submodule update --init --recursive
-          return $?
-        else
-          cannot-fast-forward
-          return 1
-        fi
-      elif [[ $REMOTE == $BASE ]]; then
-        cannot-fast-forward "Commits in master that aren't in upstream."
-        return 1
+#
+# Aliases
+#
+
+# Disable correction.
+alias ack='nocorrect ack'
+alias cd='nocorrect cd'
+alias cp='nocorrect cp'
+alias ebuild='nocorrect ebuild'
+alias gcc='nocorrect gcc'
+alias gist='nocorrect gist'
+alias grep='nocorrect grep'
+alias heroku='nocorrect heroku'
+alias ln='nocorrect ln'
+alias man='nocorrect man'
+alias mkdir='nocorrect mkdir'
+alias mv='nocorrect mv'
+alias mysql='nocorrect mysql'
+alias rm='nocorrect rm'
+
+# Disable globbing.
+alias bower='noglob bower'
+alias fc='noglob fc'
+alias find='noglob find'
+alias ftp='noglob ftp'
+alias history='noglob history'
+alias locate='noglob locate'
+alias rake='noglob rake'
+alias rsync='noglob rsync'
+alias scp='noglob scp'
+alias sftp='noglob sftp'
+
+# Define general aliases.
+alias _='sudo'
+alias b='${(z)BROWSER}'
+
+alias diffu="diff --unified"
+alias e='${(z)VISUAL:-${(z)EDITOR}}'
+alias mkdir="${aliases[mkdir]:-mkdir} -p"
+alias p='${(z)PAGER}'
+alias po='popd'
+alias pu='pushd'
+alias sa='alias | grep -i'
+alias type='type -a'
+
+# Safe ops. Ask the user before doing anything destructive.
+alias rmi="${aliases[rm]:-rm} -i"
+alias mvi="${aliases[mv]:-mv} -i"
+alias cpi="${aliases[cp]:-cp} -i"
+alias lni="${aliases[ln]:-ln} -i"
+if zstyle -T ':prezto:module:utility' safe-ops; then
+  alias rm="${aliases[rm]:-rm} -i"
+  alias mv="${aliases[mv]:-mv} -i"
+  alias cp="${aliases[cp]:-cp} -i"
+  alias ln="${aliases[ln]:-ln} -i"
+fi
+
+# ls
+if is-callable 'dircolors'; then
+  # GNU Core Utilities
+
+  if zstyle -T ':prezto:module:utility:ls' dirs-first; then
+    alias ls="${aliases[ls]:-ls} --group-directories-first"
+  fi
+
+  if zstyle -t ':prezto:module:utility:ls' color; then
+    # Call dircolors to define colors if they're missing
+    if [[ -z "$LS_COLORS" ]]; then
+      if [[ -s "$HOME/.dir_colors" ]]; then
+        eval "$(dircolors --sh "$HOME/.dir_colors")"
       else
-        cannot-fast-forward "Upstream and local have diverged."
-        return 1
-      fi
-    else
-      printf "zprezto install at '%s' is not on the master branch " "${ZPREZTODIR}"
-      printf "(you're on '%s')\nUnable to automatically update.\n" "${orig_branch}"
-      return 1
-    fi
-    return 1
-  )
-}
-#
-# Module Loader
-#
-
-# Loads Prezto modules.
-function pmodload {
-  local -a pmodules
-  local -a pmodule_dirs
-  local -a locations
-  local pmodule
-  local pmodule_location
-  local pfunction_glob='^([_.]*|prompt_*_setup|README*|*~)(-.N:t)'
-
-  # Load in any additional directories and warn if they don't exist
-  zstyle -a ':prezto:load' pmodule-dirs 'user_pmodule_dirs'
-  for user_dir in "$user_pmodule_dirs[@]"; do
-    if [[ ! -d "$user_dir" ]]; then
-      echo "$0: Missing user module dir: $user_dir"
-    fi
-  done
-
-  pmodule_dirs=("$ZPREZTODIR/modules" "$ZPREZTODIR/contrib" "$user_pmodule_dirs[@]")
-
-  # $argv is overridden in the anonymous function.
-  pmodules=("$argv[@]")
-
-  # Load Prezto modules.
-  for pmodule in "$pmodules[@]"; do
-    if zstyle -t ":prezto:module:$pmodule" loaded 'yes' 'no'; then
-      continue
-    else
-      locations=(${pmodule_dirs:+${^pmodule_dirs}/$pmodule(-/FN)})
-      if (( ${#locations} > 1 )); then
-        if ! zstyle -t ':prezto:load' pmodule-allow-overrides 'yes'; then
-          print "$0: conflicting module locations: $locations"
-          continue
-        fi
-      elif (( ${#locations} < 1 )); then
-        print "$0: no such module: $pmodule"
-        continue
-      fi
-
-      # Grab the full path to this module
-      pmodule_location=${locations[-1]}
-
-      # Add functions to $fpath.
-      fpath=(${pmodule_location}/functions(-/FN) $fpath)
-
-      function {
-        local pfunction
-
-        # Extended globbing is needed for listing autoloadable function directories.
-        setopt LOCAL_OPTIONS EXTENDED_GLOB
-
-        # Load Prezto functions.
-        for pfunction in ${pmodule_location}/functions/$~pfunction_glob; do
-          autoload -Uz "$pfunction"
-        done
-      }
-
-      if [[ -s "${pmodule_location}/init.zsh" ]]; then
-        source "${pmodule_location}/init.zsh"
-      elif [[ -s "${pmodule_location}/${pmodule}.plugin.zsh" ]]; then
-        source "${pmodule_location}/${pmodule}.plugin.zsh"
-      fi
-
-      if (( $? == 0 )); then
-        zstyle ":prezto:module:$pmodule" loaded 'yes'
-      else
-        # Remove the $fpath entry.
-        fpath[(r)${pmodule_location}/functions]=()
-
-        function {
-          local pfunction
-
-          # Extended globbing is needed for listing autoloadable function
-          # directories.
-          setopt LOCAL_OPTIONS EXTENDED_GLOB
-
-          # Unload Prezto functions.
-          for pfunction in ${pmodule_location}/functions/$~pfunction_glob; do
-            unfunction "$pfunction"
-          done
-        }
-
-        zstyle ":prezto:module:$pmodule" loaded 'no'
+        eval "$(dircolors --sh)"
       fi
     fi
-  done
-}
 
-#
-# Prezto Initialization
-#
+    alias ls="${aliases[ls]:-ls} --color=auto"
+  else
+    alias ls="${aliases[ls]:-ls} -F"
+  fi
+else
+  # BSD Core Utilities
+  if zstyle -t ':prezto:module:utility:ls' color; then
+    # Define colors for BSD ls if they're not already defined
+    if [[ -z "$LSCOLORS" ]]; then
+      export LSCOLORS='exfxcxdxbxGxDxabagacad'
+    fi
 
-# This finds the directory prezto is installed to so plugin managers don't need
-# to rely on dirty hacks to force prezto into a directory. Additionally, it
-# needs to be done here because inside the pmodload function ${0:h} evaluates to
-# the current directory of the shell rather than the prezto dir.
-ZPREZTODIR=${0:h}
+    # Define colors for the completion system if they're not already defined
+    if [[ -z "$LS_COLORS" ]]; then
+      export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
+    fi
 
-# Source the Prezto configuration file.
-if [[ -s "${ZDOTDIR:-$HOME}/.zpreztorc" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zpreztorc"
+    alias ls="${aliases[ls]:-ls} -G"
+  else
+    alias ls="${aliases[ls]:-ls} -F"
+  fi
 fi
 
-# Disable color and theme in dumb terminals.
-if [[ "$TERM" == 'dumb' ]]; then
-  zstyle ':prezto:*:*' color 'no'
-  zstyle ':prezto:module:prompt' theme 'off'
+alias l='ls -1A'         # Lists in one column, hidden files.
+alias ll='ls -lh'        # Lists human readable sizes.
+alias lr='ll -R'         # Lists human readable sizes, recursively.
+alias la='ll -A'         # Lists human readable sizes, hidden files.
+alias lm='la | "$PAGER"' # Lists human readable sizes, hidden files through pager.
+alias lx='ll -XB'        # Lists sorted by extension (GNU only).
+alias lk='ll -Sr'        # Lists sorted by size, largest last.
+alias lt='ll -tr'        # Lists sorted by date, most recent last.
+alias lc='lt -c'         # Lists sorted by date, most recent last, shows change time.
+alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
+alias sl='ls'            # I often screw this up.
+
+# Grep
+if zstyle -t ':prezto:module:utility:grep' color; then
+  export GREP_COLOR='37;45'           # BSD.
+  export GREP_COLORS="mt=$GREP_COLOR" # GNU.
+
+  alias grep="${aliases[grep]:-grep} --color=auto"
 fi
 
-# Load Zsh modules.
-zstyle -a ':prezto:load' zmodule 'zmodules'
-for zmodule ("$zmodules[@]") zmodload "zsh/${(z)zmodule}"
-unset zmodule{s,}
+# macOS Everywhere
+if is-darwin; then
+  alias o='open'
+elif is-cygwin; then
+  alias o='cygstart'
+  alias pbcopy='tee > /dev/clipboard'
+  alias pbpaste='cat /dev/clipboard'
+elif is-termux; then
+  alias o='termux-open'
+  alias pbcopy='termux-clipboard-set'
+  alias pbpaste='termux-clipboard-get'
+else
+  alias o='xdg-open'
 
-# Autoload Zsh functions.
-zstyle -a ':prezto:load' zfunction 'zfunctions'
-for zfunction ("$zfunctions[@]") autoload -Uz "$zfunction"
-unset zfunction{s,}
+  if (( $+commands[xclip] )); then
+    alias pbcopy='xclip -selection clipboard -in'
+    alias pbpaste='xclip -selection clipboard -out'
+  elif (( $+commands[xsel] )); then
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+  fi
+fi
 
-# Load Prezto modules.
-zstyle -a ':prezto:load' pmodule 'pmodules'
-pmodload "$pmodules[@]"
-unset pmodules
+alias pbc='pbcopy'
+alias pbp='pbpaste'
+
+# File Download
+if (( $+commands[curl] )); then
+  alias get='curl --continue-at - --location --progress-bar --remote-name --remote-time'
+elif (( $+commands[wget] )); then
+  alias get='wget --continue --progress=bar --timestamping'
+fi
+
+# Resource Usage
+alias df='df -kh'
+alias du='du -kh'
+
+if is-darwin || is-bsd; then
+  alias topc='top -o cpu'
+  alias topm='top -o vsize'
+else
+  alias topc='top -o %CPU'
+  alias topm='top -o %MEM'
+fi
+
+# Miscellaneous
+
+# Serves a directory via HTTP.
+if (( $+commands[python3] )); then
+  alias http-serve='python3 -m http.server'
+else
+  alias http-serve='python -m SimpleHTTPServer'
+fi
+
+#
+# Functions
+#
+
+# Makes a directory and changes to it.
+function mkdcd {
+  [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
+}
+
+# Changes to a directory and lists its contents.
+function cdls {
+  builtin cd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Pushes an entry onto the directory stack and lists its contents.
+function pushdls {
+  builtin pushd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Pops an entry off the directory stack and lists its contents.
+function popdls {
+  builtin popd "$argv[-1]" && ls "${(@)argv[1,-2]}"
+}
+
+# Prints columns 1 2 3 ... n.
+function slit {
+  awk "{ print ${(j:,:):-\$${^@}} }"
+}
+
+# Finds files and executes a command on them.
+function find-exec {
+  find . -type f -iname "*${1:-}*" -exec "${2:-file}" '{}' \;
+}
+
+# Displays user owned processes status.
+function psu {
+  ps -U "${1:-$LOGNAME}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
+}
+
+# Enables globbing selectively on path arguments.
+# Globbing is enabled on local paths (starting in '/' and './') and disabled
+# on remote paths (containing ':' but not starting in '/' and './'). This is
+# useful for programs that have their own globbing for remote paths.
+# Currently, this is used by default for 'rsync' and 'scp'.
+# Example:
+#   - Local: '*.txt', './foo:2017*.txt', '/var/*:log.txt'
+#   - Remote: user@localhost:foo/
+#
+# NOTE: This function is buggy and is not used anywhere until we can make sure
+# it's fixed. See https://github.com/sorin-ionescu/prezto/issues/1443 and
+# https://github.com/sorin-ionescu/prezto/issues/1521 for more information.
+function noremoteglob {
+  local -a argo
+  local cmd="$1"
+  for arg in ${argv:2}; do case $arg in
+    ( ./* ) argo+=( ${~arg} ) ;; # local relative, glob
+    (  /* ) argo+=( ${~arg} ) ;; # local absolute, glob
+    ( *:* ) argo+=( ${arg}  ) ;; # remote, noglob
+    (  *  ) argo+=( ${~arg} ) ;; # default, glob
+  esac; done
+  command $cmd "${(@)argo}"
+}
